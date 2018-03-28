@@ -1,0 +1,63 @@
+
+# mysql
+
+mysql --defaults-extra-file=bench.cnf -h ggunson-test2.c2kw1eiqbprj.us-east-1.rds.amazonaws.com employees
+
+show table status like 'employees'\G
+show create table employees\G
+
+
+# PT-OSC
+
+# dry run
+time pt-online-schema-change -u ggunson --ask-pass -h ggunson-test2.c2kw1eiqbprj.us-east-1.rds.amazonaws.com  --alter "engine=innodb" D=employees,t=employees --dry-run
+
+# execute 
+
+time pt-online-schema-change -u ggunson --ask-pass -h ggunson-test2.c2kw1eiqbprj.us-east-1.rds.amazonaws.com  --alter "engine=innodb" D=employees,t=employees --execute
+
+# execute with max-load set
+
+time pt-online-schema-change -u ggunson --ask-pass -h ggunson-test2.c2kw1eiqbprj.us-east-1.rds.amazonaws.com  --alter "engine=innodb" D=employees,t=employees --max-load=Threads_running=2 --execute
+
+ 
+##############
+
+# GH-OST
+
+
+time gh-ost --allow-on-master \
+--host=ggunson-test2.c2kw1eiqbprj.us-east-1.rds.amazonaws.com \
+--conf=bench2.cnf --database=employees --table=employees --verbose \
+--initially-drop-old-table \
+--postpone-cut-over-flag-file=flag \
+--alter="engine=innodb" 
+
+1. set binlog_format = ROW on DB parameter group
+
+2. Put user/pw into conf file
+
+[client]
+user=ggunson
+password=asdfasdf
+
+
+
+
+
+ALTER, CREATE, DELETE, DROP, INDEX, INSERT, LOCK TABLES, SELECT, TRIGGER, UPDATE on database
+REPLICATION CLIENT, REPLICATION SLAVE on *.*
+
+ALTER TABLE employees ADD INDEX ind_last_name (last_name);
+ALTER TABLE employees DROP INDEX ind_last_name;
+
+
+ALTER TABLE employees ALGORITHM=INPLACE, ADD INDEX ind_last_name (last_name);
+ALTER TABLE employees ALGORITHM=INPLACE, DROP INDEX ind_last_name;
+ALTER TABLE employees ALGORITHM=INPLACE, ADD COLUMN foo int not null;
+
+
+
+EXTRA
+
+- note how dropping tables can cause locking 
