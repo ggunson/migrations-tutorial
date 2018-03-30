@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-HOST=ggunson-test2.c2kw1eiqbprj.us-east-1.rds.amazonaws.com
+HOST=$1
 
 ID=0
 INCR=0
