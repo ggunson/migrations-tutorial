@@ -2,7 +2,7 @@
 # operation.sh <select|insert|update|delete>
 
 set -e
-DEFAULT_FILE="bench.cnf"
+DEFAULT_FILE="client.cnf"
 PAUSE_FILE="pause.txt"
 KILL_FILE="kill.txt"
 OPERATION=$1
