@@ -1,4 +1,5 @@
 #!/bin/bash
+# operation.sh <select|insert|update|delete>
 
 set -e
 DEFAULT_FILE="bench.cnf"
@@ -16,7 +17,7 @@ while true; do
     id=$(( $(( $RANDOM )) * 15 ))
     inserts=$(mysql --defaults-extra-file=$DEFAULT_FILE -e "INSERT IGNORE INTO employees (emp_no, birth_date, first_name, last_name, hire_date) values ($id, '1990-12-25', 'Bob', 'Smith$id', CURDATE())" || true)
     if [[ $inserts -eq 0 ]]; then
-      echo "INSERT IGNORE INTO employees (emp_no, birth_date, first_name, last_name, hire_date) values ($id, '1999-12-25', 'Bob', 'Smith$id', CURDATE())"
+      echo "INSERT IGNORE INTO employees (emp_no, birth_date, first_name, last_name, hire_date) values ($id, '1990-12-25', 'Bob', 'Smith$id', CURDATE())"
     fi
     sleep 1
   
