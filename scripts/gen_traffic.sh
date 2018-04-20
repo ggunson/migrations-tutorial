@@ -21,3 +21,5 @@ echo "Starting updates"
 sleep 0.5
 echo "Starting deletes"
 ./operations.sh delete >> activity.log 2>&1 &
+
+exit 0
